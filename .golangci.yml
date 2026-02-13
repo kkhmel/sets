@@ -1,0 +1,32 @@
+version: "2"
+
+issues:
+  # Print all issues reported by all linters.
+  max-issues-per-linter: 0
+  max-same-issues: 0
+
+linters:
+  enable:
+    # correctness: find real bugs
+    - govet
+    - staticcheck
+
+    # error handling
+    - errcheck
+    - errorlint
+
+    # simplicity: remove unnecessary code
+    - unconvert
+    - unparam
+    - unused
+    - ineffassign
+
+    # style
+    - revive
+    - misspell
+
+    # performance
+    - prealloc
+
+formatters:
+  enable: [gofumpt]

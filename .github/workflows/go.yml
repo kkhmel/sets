@@ -1,0 +1,70 @@
+name: Go
+
+on:
+  push:
+    branches: [ 'main' ]
+    tags: [ 'v*' ]
+  pull_request:
+    branches: [ '*' ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Build and test
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go: [ 1.23, stable ]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: ${{ matrix.go }}
+
+      - name: Check License
+        if: matrix.go == 'stable'
+        run: ./checklicense.sh
+
+      - name: Check No External Dependencies
+        if: matrix.go == 'stable'
+        run: |
+          if [ "$(go list -m all | wc -l | xargs)" -ne 1 ]; then
+            echo "External dependencies found:"
+            go list -m all
+            exit 1
+          fi
+          echo "No external dependencies verified."
+
+      - name: Build
+        run: go build -v ./...
+
+      - name: Test
+        run: |
+          if [ "${{ matrix.go }}" = "stable" ]; then
+            go test -v -race -coverprofile=coverage.out ./...
+          else
+            go test -v -race ./...
+          fi
+
+      - name: Upload coverage reports to Codecov
+        if: matrix.go == 'stable'
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.out
+
+      - name: Check Coverage
+        if: matrix.go == 'stable'
+        run: |
+          total=$(go tool cover -func=coverage.out | grep total | grep -oE "[0-9]+\.[0-9]+")
+          if [ "$total" != "100.0" ]; then
+            echo "Coverage is ${total}%, but 100.0% is required."
+            exit 1
+          fi
