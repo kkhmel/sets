@@ -10,8 +10,6 @@ If you'd like to add new exported APIs, please [open an issue][open-issue] descr
 2. Clone your fork:
 
 ```bash
-mkdir -p $GOPATH/src/github.com/kkhmel
-cd $GOPATH/src/github.com/kkhmel
 git clone git@github.com:your_github_username/sets.git
 cd sets
 git remote add upstream https://github.com/kkhmel/sets.git
