@@ -13,7 +13,7 @@ A high-performance, idiomatic Go library for set operations that follows the sam
 
 This library combines **idiomatic Go design** with **practical functionality** that developers need in real-world projects.
 
-**Native map at the core.** `Set[T]` is a **type alias** for `map[T]struct{}`, not a wrapper type. All native Go map operations work out of the box: `len()`, `clear()`, `delete()`, `for...range`.
+**Native map at the core.** `Set[T]` is a **type definition** for `map[T]struct{}`, not a wrapper type. All native Go map operations work out of the box: `len()`, `clear()`, `delete()`, `for...range`.
 
 **Follows standard library conventions.** The API mirrors the design of [`maps`](https://pkg.go.dev/maps) and [`slices`](https://pkg.go.dev/slices) — composable functions that each do one thing well, consistent naming, variadic parameters where they make sense. No method chaining or fluent APIs.
 
@@ -95,7 +95,7 @@ if sets.Contains(s, "x") { ... }         // Instead of: if _, ok := s["x"]; ok {
 if sets.ContainsAny(s, items...) { ... } // Instead of: manual loop with checks
 ```
 
-But since `Set[T]` is a type alias for `map[T]struct{}`, you have full access to native Go map operations and the [`maps`](https://pkg.go.dev/maps) package.
+But since `Set[T]` is a type definition for `map[T]struct{}`, you have full access to native Go map operations and the [`maps`](https://pkg.go.dev/maps) package.
 
 ---
 
